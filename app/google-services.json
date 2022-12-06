@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "254052640017",
+    "project_id": "gingaminga-30a5e",
+    "storage_bucket": "gingaminga-30a5e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:254052640017:android:ee2db924555ead0f4bd8b0",
+        "android_client_info": {
+          "package_name": "com.example.gingaminga"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "254052640017-e63c1c99q8qh3qqhuldbo12svkaeiuao.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCkgfcY4fD97rUM6CgjlUtC26e4iVA8lSs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "254052640017-e63c1c99q8qh3qqhuldbo12svkaeiuao.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

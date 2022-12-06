@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">gingaminga</string>
+    <string name="empty_credentials">Please enter your credentials!</string>
+    <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
+    <string name="unmatch_password">Please check both passwords</string>
+    <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
+</resources>
