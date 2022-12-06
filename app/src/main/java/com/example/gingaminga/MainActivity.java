@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,7 +29,7 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView pemasukanTV, pengeluaranTV, notFoundTV;
+    private TextView incomeTV, expenseTV, notFoundTV;
     private ListView listView;
     private ProgressBar progressBar;
     private FirebaseAuth.AuthStateListener authListener;
@@ -62,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
         };
 
         dbTransaction = FirebaseDatabase.getInstance().getReference("transaction");
-        pemasukanTV = (TextView) findViewById(R.id.tv_total_masuk);
-        pengeluaranTV = (TextView) findViewById(R.id.tv_total_keluar);
+        incomeTV = (TextView) findViewById(R.id.tv_total_income);
+        expenseTV = (TextView) findViewById(R.id.tv_total_expense);
         notFoundTV = (TextView) findViewById(R.id.tv_not_found);
         listView = findViewById(R.id.lv_list);
         addFAB = findViewById(R.id.fab_add);
@@ -137,9 +138,17 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 transactionList.clear();
+                int incomeTotal = 0, expenseTotal = 0, nominal = 0;
 
                 for (DataSnapshot transactionSnapshot : snapshot.getChildren()) {
                     Transaction transaction = transactionSnapshot.getValue(Transaction.class);
+                    if (transaction.getCategory().equals("Income")) {
+                        nominal = Integer.valueOf(transaction.getNominal());
+                        incomeTotal = incomeTotal + nominal;
+                    } else if (transaction.getCategory().equals("Expense")) {
+                        nominal = Integer.valueOf(transaction.getNominal());
+                        expenseTotal = expenseTotal + nominal;
+                    }
                     transactionList.add(transaction);
                 }
 
@@ -150,6 +159,8 @@ public class MainActivity extends AppCompatActivity {
                     notFoundTV.setVisibility(View.VISIBLE);
                 } else {
                     notFoundTV.setVisibility(View.GONE);
+                    incomeTV.setText(String.format("Rp%,d", incomeTotal).replaceAll(",", ".")+",00");
+                    expenseTV.setText(String.format("Rp%,d", expenseTotal).replaceAll(",", ".")+",00");
                 }
             }
 
