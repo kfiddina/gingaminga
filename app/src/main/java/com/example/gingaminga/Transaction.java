@@ -10,6 +10,7 @@ public class Transaction implements Parcelable {
     private String category;
     private String nominal;
     private String description;
+    private String date;
 
     public Transaction() {}
 
@@ -53,6 +54,14 @@ public class Transaction implements Parcelable {
         this.description = description;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -65,6 +74,7 @@ public class Transaction implements Parcelable {
         dest.writeString(this.category);
         dest.writeString(this.nominal);
         dest.writeString(this.description);
+        dest.writeString(this.date);
     }
 
     protected Transaction(Parcel in) {
@@ -73,6 +83,7 @@ public class Transaction implements Parcelable {
         this.category = in.readString();
         this.nominal = in.readString();
         this.description = in.readString();
+        this.date = in.readString();
     }
 
     public static final Parcelable.Creator<Transaction> CREATOR = new Parcelable.Creator<Transaction>() {

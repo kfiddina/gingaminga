@@ -4,4 +4,9 @@
     <string name="minimum_password">Password too short, enter minimum 6 characters!</string>
     <string name="unmatch_password">Please check both passwords</string>
     <string name="auth_failed">Authentication failed, check your email and password or sign up</string>
+
+    <string-array name="categories">
+        <item>Income</item>
+        <item>Expense</item>
+    </string-array>
 </resources>

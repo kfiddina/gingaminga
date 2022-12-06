@@ -1,6 +1,7 @@
 package com.example.gingaminga;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,11 +56,12 @@ public class TransactionAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        private TextView title, category, nominal;
+        private TextView title, category, nominal, date;
         ViewHolder(View view) {
             title = view.findViewById(R.id.tv_title);
             category = view.findViewById(R.id.tv_category);
             nominal = view.findViewById(R.id.tv_nominal);
+            date = view.findViewById(R.id.tv_date);
         }
 
         void bind(Transaction transaction) {
@@ -67,8 +69,14 @@ public class TransactionAdapter extends BaseAdapter {
             title.setText(transaction.getTitle());
             category.setText(transaction.getCategory());
             nominal.setText(String.format("Rp%,d", Integer.parseInt(transaction.getNominal())).replaceAll(",", ".")+",00");
+            date.setText(transaction.getDate());
 //            nominal.setText(String.format("Rp%,d,-", 123456));
 //            nominal.setText("hahhaha");
+            if (transaction.getCategory().equals("Income")) {
+                nominal.setTextColor(Color.parseColor("#4CAF50"));
+            } else if (transaction.getCategory().equals("Expense")) {
+                nominal.setTextColor(Color.parseColor("#F44336"));
+            }
         }
     }
 }

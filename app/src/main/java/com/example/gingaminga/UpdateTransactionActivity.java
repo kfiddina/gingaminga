@@ -5,24 +5,34 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CalendarView;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class UpdateTransactionActivity extends AppCompatActivity implements View.OnClickListener {
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
 
-    private EditText titleEdit, categoryEdit, nominalEdit, desctiptionEdit;
+public class UpdateTransactionActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
+    private EditText titleEdit, categoryEdit, nominalEdit, descriptionEdit, dateEdit;
     private Button updateButton;
-    private String transactionId;
+    private Spinner categorySpinner;
+    private String transactionId, chosenCategory;
     private Transaction transaction;
 
     public static final String EXTRA_TRANSACTION = "extra_transaction";
@@ -41,14 +51,44 @@ public class UpdateTransactionActivity extends AppCompatActivity implements View
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         titleEdit = (EditText) findViewById(R.id.edt_title);
-        categoryEdit = (EditText) findViewById(R.id.edt_category);
+//        categoryEdit = (EditText) findViewById(R.id.edt_category);
+        categorySpinner = findViewById(R.id.edt_category);
         nominalEdit = (EditText) findViewById(R.id.edt_nominal);
-        desctiptionEdit = (EditText) findViewById(R.id.edt_description);
+        descriptionEdit = (EditText) findViewById(R.id.edt_description);
+        dateEdit = (EditText) findViewById(R.id.edt_date);
         updateButton = (Button) findViewById(R.id.btn_update_transaction);
 
-        updateButton.setOnClickListener(this);
-        transaction = getIntent().getParcelableExtra(EXTRA_TRANSACTION);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("Edit Transaction");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
+        dateEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog.OnDateSetListener date = ((view, year, month, dayOfMonth) -> {
+                    calendar.set(Calendar.YEAR, year);
+                    calendar.set(Calendar.MONTH, month);
+                    calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                    String strFormatDefault = "d MMMM yyyy";
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(strFormatDefault, Locale.getDefault());
+                    dateEdit.setText(simpleDateFormat.format(calendar.getTime()));
+                });
+
+                new DatePickerDialog(UpdateTransactionActivity.this, date,
+                        calendar.get(Calendar.YEAR),
+                        calendar.get(Calendar.MONTH),
+                        calendar.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
+
+        ArrayAdapter<CharSequence> spinnerAdapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        categorySpinner.setAdapter(spinnerAdapter);
+        categorySpinner.setOnItemSelectedListener(this);
+
+        transaction = getIntent().getParcelableExtra(EXTRA_TRANSACTION);
         if (transaction != null) {
             transactionId = transaction.getId();
         } else {
@@ -57,29 +97,34 @@ public class UpdateTransactionActivity extends AppCompatActivity implements View
 
         if (transaction != null) {
             titleEdit.setText(transaction.getTitle());
-            categoryEdit.setText(transaction.getCategory());
+//            categoryEdit.setText(transaction.getCategory());
             nominalEdit.setText(transaction.getNominal());
-            desctiptionEdit.setText(transaction.getDescription());
+            descriptionEdit.setText(transaction.getDescription());
+            dateEdit.setText(transaction.getDate());
+            categorySpinner.setSelection(spinnerAdapter.getPosition(transaction.getCategory()));
         }
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setTitle("Edit Transaction");
-            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        }
+//        updateButton.setOnClickListener(this);
+        updateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateTransaction();
+            }
+        });
     }
 
-    @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_update_transaction) {
-            updateTransaction();
-        }
-    }
+//    @Override
+//    public void onClick(View v) {
+//        if (v.getId() == R.id.btn_update_transaction) {
+//            updateTransaction();
+//        }
+//    }
 
     private void updateTransaction() {
         String title = titleEdit.getText().toString().trim();
-        String category = categoryEdit.getText().toString().trim();
+        String category = chosenCategory;
         String nominal = nominalEdit.getText().toString().trim();
-        String description = desctiptionEdit.getText().toString().trim();
+        String description = descriptionEdit.getText().toString().trim();
+        String date = dateEdit.getText().toString().trim();
         boolean isEmptyField = false;
 
         if (TextUtils.isEmpty(title)) {
@@ -97,6 +142,11 @@ public class UpdateTransactionActivity extends AppCompatActivity implements View
             nominalEdit.setError("This field cannot be empty!");
         }
 
+        if (TextUtils.isEmpty(date)) {
+            isEmptyField = true;
+            dateEdit.setError("This field cannot be empty!");
+        }
+
         if (!isEmptyField) {
             Toast.makeText(UpdateTransactionActivity.this, "Updating data...", Toast.LENGTH_SHORT).show();
 
@@ -104,6 +154,7 @@ public class UpdateTransactionActivity extends AppCompatActivity implements View
             transaction.setCategory(category);
             transaction.setNominal(nominal);
             transaction.setDescription(description);
+            transaction.setDate(date);
 
             DatabaseReference dbTransaction = mDatabase.child("transaction");
 
@@ -177,5 +228,15 @@ public class UpdateTransactionActivity extends AppCompatActivity implements View
                 });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        chosenCategory = parent.getItemAtPosition(position).toString();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
     }
 }

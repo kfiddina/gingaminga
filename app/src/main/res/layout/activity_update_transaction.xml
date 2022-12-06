@@ -46,7 +46,25 @@
         <EditText
             android:id="@+id/edt_title"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:maxLines="1" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Date" />
+
+        <EditText
+            android:id="@+id/edt_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:focusableInTouchMode="false"
+            android:imeOptions="actionNext"
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="match_parent"
@@ -54,10 +72,16 @@
             android:layout_marginTop="16dp"
             android:text="Category" />
 
-        <EditText
+        <Spinner
             android:id="@+id/edt_category"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+            android:inputType="text"
+            android:imeOptions="actionNext"
+            android:maxLines="1"
+            android:textSize="20sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -69,7 +93,9 @@
             android:id="@+id/edt_nominal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:imeOptions="actionNext"
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="match_parent"
@@ -81,7 +107,8 @@
             android:id="@+id/edt_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine|textImeMultiLine"/>
+            android:inputType="textMultiLine|textImeMultiLine"
+            android:imeOptions="actionDone" />
 
         <Button
             android:id="@+id/btn_update_transaction"
