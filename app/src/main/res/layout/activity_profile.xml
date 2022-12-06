@@ -50,15 +50,17 @@
         android:id="@+id/edt_password"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_toEndOf="@id/iv_profile"
         android:layout_below="@id/edt_email"
         android:layout_marginRight="30dp"
+        android:layout_toEndOf="@id/iv_profile"
         android:drawableStart="@drawable/ic_lock_outline_24"
         android:drawablePadding="10dp"
+        android:editable="true"
         android:hint="Enter new password"
         android:inputType="textPassword"
         android:textColorHint="#444444"
-        android:editable="true"/>
+        android:imeOptions="actionDone"
+        android:maxLines="1" />
 
     <LinearLayout
         android:id="@+id/ll_button"
