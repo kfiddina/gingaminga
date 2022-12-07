@@ -78,13 +78,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this, AddTransactionActivity.class));
-                Toast.makeText(MainActivity.this, "FAB Clicked!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "FAB Clicked!", Toast.LENGTH_SHORT).show();
             }
         });
 
         // List of Transaction
         transactionList = new ArrayList<>();
-
 
         // Listener for items in listView
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -109,10 +108,10 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.mn_profile:
                 startActivity(new Intent(MainActivity.this, ProfileActivity.class));
-                Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Hello", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.mn_logout:
-                Toast.makeText(this, "Bye Bye !!", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "Bye Bye !!", Toast.LENGTH_SHORT).show();
                 signOut();
                 break;
         }
